@@ -20,7 +20,7 @@ module.exports = {
       date: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW()
+        defaultValue: Date.now()
       },
       summary: {
         type: Sequelize.TEXT,

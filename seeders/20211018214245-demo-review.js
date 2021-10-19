@@ -5,7 +5,6 @@ module.exports = {
     return queryInterface.bulkInsert('Reviews', [{
       product_id: '1',
       rating: 5,
-      date: new Date(1596080481467),
       summary: "This product was great!",
       body: "I really did or did not like this product based on whether it was sustainably sourced.  Then I found out that its made from nothing at all.",
       recommend: true,
