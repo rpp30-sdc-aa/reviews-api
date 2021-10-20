@@ -1,18 +1,35 @@
 'use strict';
+const fs = require('fs')
+const csv = require('@fast-csv/parse')
+
+const getCSVArray = (path) => {
+  return new Promise((resolve, reject) => {
+    let bulkInsertArr = []
+    csv.parseFile(path, {headers: true, maxRows: 200})
+      .transform(data => {
+        let {date, id, rating, helpfulness, recommend, reported, response, ...rest} = data
+        return {
+          date: new Date(Number(date)),
+          id: Number(id),
+          rating: Number(rating),
+          helpfulness: Number(helpfulness),
+          recommend: recommend === 'true',
+          reported: reported === 'true',
+          response: (response === 'null' ? null : response),
+           ...rest}
+      })
+      .on('error', error => reject(error))
+      .on('data', row => bulkInsertArr.push(row))
+      .on('end', () => resolve(bulkInsertArr));
+  })
+}
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Reviews', [{
-      product_id: '1',
-      rating: 5,
-      summary: "This product was great!",
-      body: "I really did or did not like this product based on whether it was sustainably sourced.  Then I found out that its made from nothing at all.",
-      recommend: true,
-      reported: false,
-      reviewer_name: "funtime",
-      reviewer_email: "first.last@gmail.com",
-      helpfulness: 8
-    }])
+
+    let data = await getCSVArray('/Users/alex/code/reviews-api/seeders/sample/reviews.csv')
+    // console.log(data)
+    return queryInterface.bulkInsert('Reviews', data)
     /**
      * Add seed commands here.
      *
