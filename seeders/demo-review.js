@@ -2,10 +2,11 @@
 const fs = require('fs')
 const csv = require('@fast-csv/parse')
 
-const getCSVArray = (path) => {
+const getCSVArray = (path, start) => {
   return new Promise((resolve, reject) => {
     let bulkInsertArr = []
-    csv.parseFile(path, {headers: true, maxRows: 200})
+
+    csv.parseFile(path, {headers: true, maxRows: 5000, skipRows: start})
       .transform(data => {
         let {date, id, rating, helpfulness, recommend, reported, response, ...rest} = data
         return {
@@ -20,16 +21,33 @@ const getCSVArray = (path) => {
       })
       .on('error', error => reject(error))
       .on('data', row => bulkInsertArr.push(row))
-      .on('end', () => resolve(bulkInsertArr));
+      .on('end', (rowCount) => {
+        let end = null
+        if (rowCount < 5000) {
+          end = true
+        }
+        resolve({bulkInsertArr, end})});
   })
 }
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
-    let data = await getCSVArray('/Users/alex/code/reviews-api/seeders/sample/reviews.csv')
+    let end = null
+    let current = 0
+    while(!end) {
+      try {
+        let data = await getCSVArray('/Users/alexanderolvera/code/SDC/reviews-api/seeders/sample/reviews.csv', current)
+        await queryInterface.bulkInsert('Reviews', data.bulkInsertArr)
+        end = data.end
+        current += 5000
+        console.log(current)
+      } catch(err) {
+        console.log(err)
+        end = true
+      }
+    }
     // console.log(data)
-    return queryInterface.bulkInsert('Reviews', data)
     /**
      * Add seed commands here.
      *
