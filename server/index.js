@@ -4,8 +4,8 @@ const { getReviews } = require('../controllers/index.js')
 
 
 app.get('/reviews', async (req, res) => {
-  const { page, product_id, limit } = req.query;
   try {
+    const { page, product_id, limit } = req.query;
     let reviews = await getReviews(product_id, limit, page)
     res.json({
       product_id,
@@ -14,7 +14,7 @@ app.get('/reviews', async (req, res) => {
     })
   } catch(err) {
     console.log(error)
-    res.status(500).send('Failed to fetch reviews...')
+    res.status(500).send('Failed to fetch reviews...', err)
   }
 });
 

@@ -1,0 +1,9 @@
+{
+  "apps": [
+      {
+          "name": "start etl",
+          "script": "npm",
+          "args": "run etl"
+      }
+  ]
+}
