@@ -1,62 +1,42 @@
 'use strict';
-const fs = require('fs')
-const csv = require('@fast-csv/parse')
+const path = require('path')
+const { parseToObjectArray } =  require('./utils/utils.js')
 
-const getCSVArray = (path, start) => {
-  return new Promise((resolve, reject) => {
-    let bulkInsertArr = []
-
-    csv.parseFile(path, {headers: true, maxRows: 5000, skipRows: start})
-      .transform(data => {
-        let {date, id, rating, helpfulness, recommend, reported, response, ...rest} = data
-        return {
-          date: new Date(Number(date)),
-          id: Number(id),
-          rating: Number(rating),
-          helpfulness: Number(helpfulness),
-          recommend: recommend === 'true',
-          reported: reported === 'true',
-          response: (response === 'null' ? null : response),
-           ...rest}
-      })
-      .on('error', error => reject(error))
-      .on('data', row => bulkInsertArr.push(row))
-      .on('end', (rowCount) => {
-        let end = null
-        if (rowCount < 5000) {
-          end = true
-        }
-        resolve({bulkInsertArr, end})});
-  })
-}
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
+    const transformCallBack = data => {
+      let {date, id, rating, helpfulness, recommend, reported, response, ...rest} = data
+      return {
+        date: new Date(Number(date)),
+        id: Number(id),
+        rating: Number(rating),
+        helpfulness: Number(helpfulness),
+        recommend: recommend === 'true',
+        reported: reported === 'true',
+        response: (response === 'null' ? null : response),
+        createdAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
+         ...rest}
+    }
+
     let end = null
     let current = 0
+    let maxRows = 10000
+
     while(!end) {
       try {
-        let data = await getCSVArray('/Users/alexanderolvera/code/SDC/reviews-api/seeders/sample/reviews.csv', current)
+        let data = await parseToObjectArray(path.resolve(__dirname, 'sample', 'reviews.csv'), maxRows, current, transformCallBack)
         await queryInterface.bulkInsert('Reviews', data.bulkInsertArr)
         end = data.end
-        current += 5000
+        current += maxRows
         console.log(current)
       } catch(err) {
         console.log(err)
         end = true
       }
     }
-    // console.log(data)
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
   },
 
   down: async (queryInterface, Sequelize) => {
