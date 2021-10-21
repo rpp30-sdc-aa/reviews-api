@@ -66,7 +66,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     }
-  }, {underscored: true, sequelize, modelName: 'Review'})
+  }, {underscored: true,
+      sequelize,
+      modelName: 'Review',
+      tableName: 'reviews'})
 
   return Review;
 }

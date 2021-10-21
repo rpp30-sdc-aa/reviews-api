@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     sequelize,
     modelName: 'Photo',
+    tableName: 'photos'
   });
   return Photo;
 };
