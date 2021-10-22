@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path')
-const { seedDatabaseFromCSV } =  require('./utils/utils.js')
+const { seedDatabaseFromCSV, seedDatabaseFromCSVFast } =  require('./utils/utils.js')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -14,18 +14,18 @@ module.exports = {
     }
 
     try {
-      let rowsAdded = await seedDatabaseFromCSV(
+      let rowCount = await seedDatabaseFromCSVFast(
         path.resolve(__dirname, 'sample', 'reviews_photos.csv'),
-        queryInterface,
         'photos',
-        100000,
+        queryInterface,
         transformCallBack
       )
 
-      console.log('Database seed complete. Rows added: ', rowsAdded)
+      console.log('Write completed', rowCount)
     } catch(err) {
       console.log(err)
     }
+
   },
 
   down: async (queryInterface, Sequelize) => {

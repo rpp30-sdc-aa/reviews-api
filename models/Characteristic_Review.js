@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Characteristic.init({
+  Characteristic_Review.init({
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,

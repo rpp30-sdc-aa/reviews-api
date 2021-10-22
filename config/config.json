@@ -4,7 +4,13 @@
     "password": null,
     "database": "reviews_dev",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "pool": {
+      "max": 5,
+      "min": 0,
+      "aquire": 60000,
+      "idle": 100000
+    }
   },
   "test": {
     "username": "alexanderolvera",
