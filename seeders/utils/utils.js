@@ -13,16 +13,16 @@ module.exports.parseToObjectArray = (path, max = 5000, start = 0, transformCB = 
   })
 }
 
-module.exports.seedDatabaseFromCSV = async (path, queryInterface, maxRows = 5000, transformCallBack) => {
-  return new Promise((resolve, reject) => {
+module.exports.seedDatabaseFromCSV = async (path, queryInterface, table, maxRows = 5000, transformCallBack) => {
+  return new Promise(async (resolve, reject) => {
     let end = null
     let current = 0
 
     while(!end) {
       try {
-        let {bulkInsertArr, rowCount} = await parseToObjectArray(path, maxRows, current, transformCallBack)
-        await queryInterface.bulkInsert('Reviews', bulkInsertArr)
-        current += data.rowCount
+        let {bulkInsertArr, rowCount} = await module.exports.parseToObjectArray(path, maxRows, current, transformCallBack)
+        await queryInterface.bulkInsert(table, bulkInsertArr)
+        current += rowCount
         console.log(current)
         if (rowCount < maxRows) {
           end = true

@@ -2,24 +2,22 @@
 const path = require('path')
 const { seedDatabaseFromCSV } =  require('./utils/utils.js')
 
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
     const transformCallBack = data => {
-      const {id, ...rest} = data;
       return {
-        id: Number(id),
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now()),
-        ...rest
+        id: Number(data.id),
+        review_id: Number(data.review_id),
+        url: data.url
       }
     }
 
     try {
       let rowsAdded = await seedDatabaseFromCSV(
-        path.resolve(__dirname, 'sample', 'characteristics.csv'),
+        path.resolve(__dirname, 'sample', 'reviews_photos.csv'),
         queryInterface,
+        'photos',
         100000,
         transformCallBack
       )
@@ -31,6 +29,12 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Reviews', null, {});
+    return queryInterface.bulkDelete('photos', null, {});
+    /**
+     * Add commands to revert seed here.
+     *
+     * Example:
+     * await queryInterface.bulkDelete('People', null, {});
+     */
   }
 };
