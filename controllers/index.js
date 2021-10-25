@@ -1,17 +1,18 @@
-const { Reviews } = require('../models/index.js')
+const { Review, Photo } = require('../models/index.js')
 
-module.exports.getReviews = async (product_id, limit = 5, page = 1) => {
-  return new Promise((resolve, reject) => {
-    const offset = page * limit;
+module.exports.getReviews = (product_id, limit = 5, page = 0) => {
+  return new Promise(async (resolve, reject) => {
+    const offset = (page > 1) ? page * limit : 0;
     try {
-      let reviews = await Reviews.findAndCountAll({
+      let returnedReviews = await Review.findAndCountAll({
         where: {
           product_id
         },
         limit,
-        offset
+        offset,
+        include: Photo
       })
-      resolve(reviews)
+      resolve(returnedReviews)
     } catch(err) {
       reject(err)
     }
