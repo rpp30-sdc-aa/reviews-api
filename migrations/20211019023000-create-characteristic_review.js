@@ -23,9 +23,7 @@ module.exports = {
       value: {
         type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

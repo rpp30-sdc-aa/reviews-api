@@ -8,8 +8,6 @@ module.exports = {
       const {id, ...rest} = data;
       return {
         id: Number(id),
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now()),
         ...rest
       }
     }

@@ -58,9 +58,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
-      },
-      createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

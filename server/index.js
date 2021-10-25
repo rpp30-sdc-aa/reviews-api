@@ -9,8 +9,8 @@ app.get('/reviews', async (req, res) => {
     res.json({
       product: product_id,
       page,
-      count: reviews.rows.length,
-      results: reviews.rows
+      count: reviews.length,
+      results: reviews
     })
   } catch(err) {
     console.log(err)
@@ -52,6 +52,7 @@ app.get('/reviews/meta', async (req, res) => {
 })
 
 app.post('/reviews', async (req, res) => {
+
 // product_id	integer	Required ID of the product to post the review for
 // rating	int	Integer (1-5) indicating the review rating
 // summary	text	Summary text of the review
@@ -61,6 +62,7 @@ app.post('/reviews', async (req, res) => {
 // email	text	Email address for question asker
 // photos	[text]	Array of text urls that link to images to be shown
 // characteristics	object	Object of keys representing characteristic_id and values representing the review value for that characteristic. { "14": 5, "15": 5 //...}
+
 res.send(200, 'Work in progress...')
 })
 

@@ -15,8 +15,6 @@ module.exports = {
         recommend: recommend === 'true',
         reported: reported === 'true',
         response: (response === 'null' ? null : response),
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now()),
          ...rest}
     }
 
