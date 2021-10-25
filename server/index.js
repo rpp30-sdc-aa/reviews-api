@@ -8,13 +8,14 @@ app.get('/reviews', async (req, res) => {
     const { page, product_id, limit } = req.query;
     let reviews = await getReviews(product_id, limit, page)
     res.json({
-      product_id,
+      product: product_id,
       page,
-      reviews
+      count: reviews.rows.length,
+      results: reviews.rows
     })
   } catch(err) {
-    console.log(error)
-    res.status(500).send('Failed to fetch reviews...', err)
+    console.log(err)
+    res.send(500, `Failed to fetch reviews... ${err}`)
   }
 });
 
