@@ -1,4 +1,4 @@
-const { Sequelize, Model } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Characteristic extends Model {
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     }
-  }, {underscored: true,
+  }, {
       sequelize,
       modelName: 'Characteristic',
       tableName: 'characteristics'})

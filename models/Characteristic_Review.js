@@ -1,4 +1,4 @@
-const { Sequelize, Model } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Characteristic_Review extends Model {
@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       // this.hasMany(models.Characteristic)
       // this.hasMany(models.Review)
+
+      // needs more testing to define associationg for return
     }
   }
 
@@ -28,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  }, {underscored: true,
+  }, {
       sequelize,
       modelName: 'Characteristic_Review',
       tableName: 'characteristic_reviews'})

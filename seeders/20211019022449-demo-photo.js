@@ -1,6 +1,5 @@
-'use strict';
 const path = require('path')
-const { seedDatabaseFromCSV, seedDatabaseFromCSVFast } =  require('./utils/utils.js')
+const { seedDatabaseFromCSVFast } =  require('./utils/utils.js')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -25,16 +24,9 @@ module.exports = {
     } catch(err) {
       console.log(err)
     }
-
   },
 
   down: async (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete('photos', null, {});
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
   }
 };

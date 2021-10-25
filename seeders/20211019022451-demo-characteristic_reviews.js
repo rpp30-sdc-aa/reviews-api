@@ -1,7 +1,5 @@
-'use strict';
 const path = require('path')
 const { seedDatabaseFromCSVFast } =  require('./utils/utils.js')
-
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -25,13 +23,11 @@ module.exports = {
         queryInterface,
         transformCallBack
       )
-
       console.log('Write completed', rowCount)
 
     } catch(err) {
       console.log(err)
     }
-
   },
 
   down: async (queryInterface, Sequelize) => {
