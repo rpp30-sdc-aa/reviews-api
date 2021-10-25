@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Review)
+      this.belongsTo(models.Review, {
+        foreignKey: 'review_id'
+      })
     }
   };
   Photo.init({
@@ -26,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    underscored: true,
     sequelize,
     modelName: 'Photo',
-    tableName: 'photos'
+    tableName: 'photos',
+    timestamps: false
   });
   return Photo;
 };

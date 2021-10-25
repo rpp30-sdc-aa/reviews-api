@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsToMany(models.Review, {
-        through: models.Characteristic_Review
+        through: models.Characteristic_Review,
+        foreignKey: 'characteristic_id'
       })
     }
   }

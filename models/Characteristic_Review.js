@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class Characteristic_Review extends Model {
     static associate(models) {
       // define association here
-      this.hasMany(models.Characteristic)
-      this.hasMany(models.Review)
+      // this.hasMany(models.Characteristic)
+      // this.hasMany(models.Review)
     }
   }
 

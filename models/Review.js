@@ -4,7 +4,13 @@ module.exports = (sequelize, DataTypes) => {
   class Review extends Model {
     static associate(models) {
       // define association here
-      this.hasMany(models.Photo)
+      this.hasMany(models.Photo, {
+        foreignKey: 'review_id'
+      })
+      this.belongsToMany(models.Characteristic, {
+        through: models.Characteristic_Review,
+        foreignKey: 'review_id'
+      })
     }
   }
 
@@ -66,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     }
-  }, {underscored: true,
+  }, {
       sequelize,
       modelName: 'Review',
       tableName: 'reviews'})
