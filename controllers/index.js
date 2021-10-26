@@ -36,6 +36,59 @@ module.exports.getReviews = (product_id, limit = 5, page = 0) => {
   })
 }
 
+module.exports.postReviews = (queryParams) => {
+  const {
+    product_id, // int
+    rating, // int
+    summary, // text
+    body, // text
+    recommend, // bool
+    name, // text
+    email, // text
+    photos, // array of text
+    characteristics // obj {char_id: value}
+  } = queryParams
+
+  return new Promise (async (resolve, reject) => {
+    try {
+      let review = await Review.create({
+        product_id,
+        rating,
+        summary,
+        body,
+        recommend,
+        reviewer_name: name,
+        reviewer_email: email
+      })
+
+      // now post the photos
+      const photoPromises = []
+      for (photo of photos) {
+        photoPromises.push(Photo.create({
+          review_id: review.id,
+          url: photo
+        }))
+      }
+      await Promise.all(photoPromises)
+
+      // now post the characteristics
+      const characteristicPromises = []
+      for (key in characteristics) {
+        characteristicPromises.push(Characteristic_Review.create({
+          characteristic_id: characteristics[key].id,
+          review_id: review.id,
+          value: characteristics[key].value
+        }))
+      }
+      await Promise.all(characteristicPromises)
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
+  })
+
+}
+
 module.exports.putHelpful = (review_id) => {
   return new Promise (async (resolve, reject) => {
     try {

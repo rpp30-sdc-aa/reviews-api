@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { getReviews, putHelpful, putReport, getCharacteristics } = require('../controllers/index.js')
+const { getReviews, putHelpful, putReport, getCharacteristics, postReviews } = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -52,18 +52,12 @@ app.get('/reviews/meta', async (req, res) => {
 })
 
 app.post('/reviews', async (req, res) => {
-
-// product_id	integer	Required ID of the product to post the review for
-// rating	int	Integer (1-5) indicating the review rating
-// summary	text	Summary text of the review
-// body	text	Continued or full text of the review
-// recommend	bool	Value indicating if the reviewer recommends the product
-// name	text	Username for question asker
-// email	text	Email address for question asker
-// photos	[text]	Array of text urls that link to images to be shown
-// characteristics	object	Object of keys representing characteristic_id and values representing the review value for that characteristic. { "14": 5, "15": 5 //...}
-
-res.send(200, 'Work in progress...')
+  try {
+    await postReviews(req.query)
+    res.sendStatus(201)
+  } catch (err) {
+    res.status(500).json(err)
+  }
 })
 
 app.put('/reviews/:review_id/helpful', async (req, res) => {
