@@ -65,3 +65,35 @@ module.exports.putReport = (review_id) => {
     }
   })
 }
+
+module.exports.getCharacteristics = (review_id) => {
+  return new Promise (async (resolve, reject) => {
+    try {
+      let characteristicsList = {}
+      let characteristicPromises = []
+      let characteristicsJoins = await Characteristic_Review.findAll({
+        where: {
+          review_id
+        }
+      })
+
+      for (let i = 0; i < characteristicsJoins.length; i++) {
+        let id = characteristicsJoins[i].characteristic_id
+        characteristicPromises.push(
+          Characteristic.findByPk(id)
+        )
+      }
+      let characteristics = await Promise.all(characteristicPromises)
+
+      for (let j = 0; j < characteristics.length; j++) {
+        characteristicsList[characteristics[j].name] = {
+          id: characteristics[j].id,
+          value: characteristicsJoins[j].value
+        }
+      }
+      resolve(characteristicsList)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}

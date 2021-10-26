@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { getReviews, putHelpful, putReport } = require('../controllers/index.js')
+const { getReviews, putHelpful, putReport, getCharacteristics } = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -81,6 +81,14 @@ app.put('/reviews/:review_id/report', async (req, res) => {
     res.sendStatus(204)
   } catch (err) {
     res.send(500, err)
+  }
+})
+
+app.get('/characteristics/:review_id', async (req, res) => {
+  try{
+    res.json(await getCharacteristics(req.params.review_id))
+  } catch (err) {
+    res.status(500).send(JSON.stringify(err))
   }
 })
 
