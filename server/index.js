@@ -1,6 +1,11 @@
 const express = require('express')
 const app = express()
-const { getReviews, putHelpful, putReport, getCharacteristics, postReviews } = require('../controllers/index.js')
+const {
+  getReviews,
+  putHelpful,
+  putReport,
+  getCharacteristics,
+  postReviews } = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {

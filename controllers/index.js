@@ -3,7 +3,7 @@ const { Review, Photo, Characteristic, Characteristic_Review } = require('../mod
 module.exports.getReviews = (product_id, limit = 5, page = 0) => {
   return new Promise(async (resolve, reject) => {
     const offset = (page > 1) ? page * limit : 0;
-    let rows = []
+
     try {
       let returnedReviews = await Review.findAndCountAll({
         where: {
@@ -12,24 +12,21 @@ module.exports.getReviews = (product_id, limit = 5, page = 0) => {
         limit,
         offset,
         include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
+        //TODO: refactor to manual query
       })
 
+      const characteristicPromises = []
+      const reviews = []
       for (let review of returnedReviews.rows) {
-        let entries = []
-        let characteristicsEntry = await Characteristic_Review.findAll({ where: { review_id: review.id }, attributes: ['value', 'id'] })
-        for (let entry of characteristicsEntry) {
-          entryObj = entry.toJSON()
-          let characteristicName = await Characteristic.findByPk(entryObj.id)
-          charObj = characteristicName.toJSON()
-          entryObj.name = charObj.name
-          delete entryObj.id
-          entries.push(entryObj)
-        }
-        reviewObj = review.toJSON()
-        reviewObj.characteristics = [...entries]
-        rows.push(reviewObj)
+        reviews.push(review.toJSON())
+        characteristicPromises.push(module.exports.getCharacteristics(review.id))
       }
-      resolve(rows)
+      const characteristics = await Promise.all(characteristicPromises)
+
+      for (let i = 0; i < reviews.length; i++) {
+        reviews[i].characteristics = characteristics[i]
+      }
+      resolve(reviews)
     } catch(err) {
       reject(err)
     }
