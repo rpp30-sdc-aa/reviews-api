@@ -35,3 +35,18 @@ module.exports.getReviews = (product_id, limit = 5, page = 0) => {
     }
   })
 }
+
+module.exports.putHelpful = (review_id) => {
+  return new Promise (async (resolve, reject) => {
+    try {
+      await Review.increment('helpfulness',{
+        where: {
+          id: review_id
+        }
+      })
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
