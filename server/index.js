@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { getReviews, putHelpful } = require('../controllers/index.js')
+const { getReviews, putHelpful, putReport } = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -67,7 +67,6 @@ res.send(200, 'Work in progress...')
 })
 
 app.put('/reviews/:review_id/helpful', async (req, res) => {
-
   try {
     await putHelpful(req.params.review_id)
     res.sendStatus(204)
@@ -77,10 +76,12 @@ app.put('/reviews/:review_id/helpful', async (req, res) => {
 })
 
 app.put('/reviews/:review_id/report', async (req, res) => {
-
-  //Status: 204 NO CONTENT
-
-  res.send(200, 'Work in progress...')
+  try {
+    await putReport(req.params.review_id)
+    res.sendStatus(204)
+  } catch (err) {
+    res.send(500, err)
+  }
 })
 
 app.listen(3005, () => {console.log('Server started....')})

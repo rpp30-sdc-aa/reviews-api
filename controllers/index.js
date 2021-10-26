@@ -50,3 +50,18 @@ module.exports.putHelpful = (review_id) => {
     }
   })
 }
+
+module.exports.putReport = (review_id) => {
+  return new Promise (async (resolve, reject) => {
+    try {
+      let review = await Review.findByPk(review_id);
+      if (!review.reported) {
+        review.reported = true;
+        await review.save()
+      }
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
