@@ -13,7 +13,7 @@
   "test": {
     "username": "alexanderolvera",
     "password": null,
-    "database": "reviews_test",
+    "database": "reviews_dev",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
