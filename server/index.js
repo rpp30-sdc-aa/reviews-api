@@ -27,34 +27,6 @@ app.get('/reviews', async (req, res) => {
 app.get('/reviews/meta', async (req, res) => {
   const { product_id } = req.query;
 
-  // {
-  //   "product_id": "2",
-  //   "ratings": {
-  //     2: 1,
-  //     3: 1,
-  //     4: 2,
-  //     // ...
-  //   },
-  //   "recommended": {
-  //     0: 5
-  //     // ...
-  //   },
-  //   "characteristics": {
-  //     "Size": {
-  //       "id": 14,
-  //       "value": "4.0000"
-  //     },
-  //     "Width": {
-  //       "id": 15,
-  //       "value": "3.5000"
-  //     },
-  //     "Comfort": {
-  //       "id": 16,
-  //       "value": "4.0000"
-  //     },
-  //     // ...
-  // }
-
   try {
     res.json(await getMetaData(product_id))
   } catch (err) {
@@ -76,7 +48,7 @@ app.put('/reviews/:review_id/helpful', async (req, res) => {
     await putHelpful(req.params.review_id)
     res.sendStatus(204)
   } catch (err) {
-    res.send(500, err)
+    res.status(500).json(err)
   }
 })
 
@@ -85,7 +57,7 @@ app.put('/reviews/:review_id/report', async (req, res) => {
     await putReport(req.params.review_id)
     res.sendStatus(204)
   } catch (err) {
-    res.send(500, err)
+    res.status(500).json(err)
   }
 })
 
