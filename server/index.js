@@ -70,3 +70,5 @@ app.get('/characteristics/:review_id', async (req, res) => {
 })
 
 app.listen(3005, () => {console.log('Server started....')})
+
+module.exports = app
