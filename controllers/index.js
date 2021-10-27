@@ -150,7 +150,15 @@ module.exports.getCharacteristics = (review_id) => {
 
 module.exports.getMetaData = (product_id) => {
   return new Promise(async (resolve, reject) => {
-    const ratings = {}
+    const metaData = {
+      product_id,
+      ratings: {},
+      characteristics: {},
+      recommended: {
+        0: 0
+      }
+    }
+    const characteristicPromises = []
     try {
       let reviews = await Review.findAll({
         where: {
@@ -159,11 +167,41 @@ module.exports.getMetaData = (product_id) => {
       })
 
       for (let review of reviews) {
-        (ratings[review.rating]) ? ratings[review.rating] += 1 : ratings[review.rating] = 1;
+        (metaData.ratings[review.rating]) ?
+          metaData.ratings[review.rating] += 1 : metaData.ratings[review.rating] = 1;
+        if (review.recommend) {
+          metaData.recommended[0] += 1
+        }
+        characteristicPromises.push(module.exports.getCharacteristics(review.id))
       }
-      console.log(ratings)
-      resolve(ratings)
+
+      // finish getting all the characteristics
+      let characteristics = await Promise.all(characteristicPromises)
+
+      for (let entry of characteristics) {
+        const keys = Object.keys(entry)
+        for (let key of keys) {
+          if (metaData.characteristics[key] === undefined) {
+            metaData.characteristics[key] = {
+              id: entry[key].id,
+              value: [entry[key].value]
+            }
+          } else {
+            metaData.characteristics[key].value.push(entry[key].value)
+          }
+        }
+      }
+      // finally, get the averages for the characteristic values
+      let characteristicKeys = Object.keys(metaData.characteristics)
+      for (let key of characteristicKeys) {
+        let array = metaData.characteristics[key].value
+        metaData.characteristics[key].value =
+          (array.reduce((a, b) => a + b) / array.length).toFixed(4)
+      }
+
+      resolve(metaData)
     } catch (err) {
+      console.log(err)
       reject(err)
     }
   })
