@@ -49,36 +49,41 @@ module.exports.postReviews = (queryParams) => {
   return new Promise (async (resolve, reject) => {
     try {
       let review = await Review.create({
-        product_id,
-        rating,
-        summary,
-        body,
-        recommend,
+        product_id: product_id,
+        rating: rating,
+        summary: summary,
+        body: body,
+        recommend: recommend,
         reviewer_name: name,
         reviewer_email: email
       })
 
       // now post the photos
-      const photoPromises = []
-      for (photo of photos) {
-        photoPromises.push(Photo.create({
-          review_id: review.id,
-          url: photo
-        }))
+      if (photos !== undefined) {
+        const photoPromises = []
+        for (let photo of photos) {
+          photoPromises.push(Photo.create({
+            review_id: review.id,
+            url: photo
+          }))
+        }
+        await Promise.all(photoPromises)
       }
-      await Promise.all(photoPromises)
 
       // now post the characteristics
-      const characteristicPromises = []
-      for (key in characteristics) {
-        characteristicPromises.push(Characteristic_Review.create({
-          characteristic_id: characteristics[key].id,
-          review_id: review.id,
-          value: characteristics[key].value
-        }))
+      if (characteristics !== undefined) {
+        const characteristicPromises = []
+        for (key in characteristics) {
+          characteristicPromises.push(Characteristic_Review.create({
+            characteristic_id: characteristics[key].id,
+            review_id: review.id,
+            value: characteristics[key].value
+          }))
+        }
+        await Promise.all(characteristicPromises)
       }
-      await Promise.all(characteristicPromises)
-      resolve()
+
+      resolve(review)
     } catch (err) {
       reject(err)
     }

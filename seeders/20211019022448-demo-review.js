@@ -9,7 +9,6 @@ module.exports = {
       let {date, id, rating, helpfulness, recommend, reported, response, ...rest} = data
       return {
         date: new Date(Number(date)),
-        id: Number(id),
         rating: Number(rating),
         helpfulness: Number(helpfulness),
         recommend: recommend === 'true',
