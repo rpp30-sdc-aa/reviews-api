@@ -5,7 +5,8 @@ const {
   putHelpful,
   putReport,
   getCharacteristics,
-  postReviews } = require('../controllers/index.js')
+  postReviews,
+  getMetaData} = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -53,7 +54,12 @@ app.get('/reviews/meta', async (req, res) => {
   //     },
   //     // ...
   // }
-  res.send(200, 'Work in progress...')
+
+  try {
+    res.json(await getMetaData(product_id))
+  } catch (err) {
+    res.status(500).json(err)
+  }
 })
 
 app.post('/reviews', async (req, res) => {

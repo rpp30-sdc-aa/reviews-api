@@ -147,3 +147,24 @@ module.exports.getCharacteristics = (review_id) => {
     }
   })
 }
+
+module.exports.getMetaData = (product_id) => {
+  return new Promise(async (resolve, reject) => {
+    const ratings = {}
+    try {
+      let reviews = await Review.findAll({
+        where: {
+          product_id
+        }
+      })
+
+      for (let review of reviews) {
+        (ratings[review.rating]) ? ratings[review.rating] += 1 : ratings[review.rating] = 1;
+      }
+      console.log(ratings)
+      resolve(ratings)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
