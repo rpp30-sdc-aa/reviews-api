@@ -1,4 +1,4 @@
-const { getReviews, postReviews } = require('../controllers')
+const { getReviews, postReviews, putHelpful } = require('../controllers')
 const { Review } = require('../models/index.js')
 
 describe('Database Controllers', function () {
@@ -43,6 +43,18 @@ describe('Database Controllers', function () {
         expect(review.toJSON()).toEqual(expectedReview.toJSON())
       } catch (err) {
         console.log(err)
+        expect(err).toBeNull()
+      }
+    })
+
+    test('Should increment a review helpfulness column by 1', async function () {
+      try {
+        let review = await Review.findByPk(1)
+        const originalValue = review.helpfulness
+        await putHelpful(review.id)
+        let updatedReview = await Review.findByPk(1)
+        expect(updatedReview.helpfulness - originalValue).toBe(1)
+      } catch (err) {
         expect(err).toBeNull()
       }
     })
