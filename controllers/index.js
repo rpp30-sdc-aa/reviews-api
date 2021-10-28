@@ -27,7 +27,7 @@ module.exports.getReviews = (product_id, limit = 5, page = 0, sort) => {
     const offset = (page > 1) ? page * limit : 0;
 
     try {
-      let returnedReviews = await Review.findAndCountAll({
+      let returnedReviews = await Review.findAll({
         where: {
           product_id
         },
@@ -44,7 +44,7 @@ module.exports.getReviews = (product_id, limit = 5, page = 0, sort) => {
       const characteristicPromises = []
       const photosPromises = []
       const reviews = []
-      for (let review of returnedReviews.rows) {
+      for (let review of returnedReviews) {
         reviews.push(review.toJSON())
         photosPromises.push(Photo.findAll({ where: { review_id: review.dataValues.review_id }}))
         characteristicPromises.push(module.exports.getCharacteristics(review.dataValues.review_id))
