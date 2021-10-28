@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
+    review_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     url: {
       type: DataTypes.TEXT,
       allowNull: false

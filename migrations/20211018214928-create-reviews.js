@@ -4,7 +4,6 @@ module.exports = {
     await queryInterface.createTable('reviews', {
       id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
@@ -58,9 +57,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
-      },
-      createdAt: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

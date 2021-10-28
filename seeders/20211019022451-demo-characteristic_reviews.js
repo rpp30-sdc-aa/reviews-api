@@ -11,8 +11,6 @@ module.exports = {
         characteristic_id: Number(characteristic_id),
         review_id: Number(review_id),
         value: Number(value),
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now())
       }
     }
 

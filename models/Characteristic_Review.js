@@ -4,8 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   class Characteristic_Review extends Model {
     static associate(models) {
       // define association here
-      // this.hasMany(models.Characteristic)
-      // this.hasMany(models.Review)
+      this.hasMany(models.Characteristic, {
+        foreignKey: 'id'
+      })
+      this.hasMany(models.Review, {
+        foreignKey: 'id'
+      })
 
       // needs more testing to define associationg for return
     }
@@ -33,7 +37,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
       sequelize,
       modelName: 'Characteristic_Review',
-      tableName: 'characteristic_reviews'})
+      tableName: 'characteristic_reviews',
+      timestamps: false
+  })
 
   return Characteristic_Review;
 }
