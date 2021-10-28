@@ -1,3 +1,4 @@
+const { response } = require('express');
 const { Review,
         Photo,
         Characteristic,
@@ -17,19 +18,26 @@ module.exports.getReviews = (product_id, limit = 5, page = 0) => {
         },
         limit,
         offset,
-        include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
-        //TODO: refactor to manual query
+        attributes: [['id', 'review_id'], 'product_id', 'rating', 'date', 'summary', 'body', 'recommend', 'reported', 'reviewer_name', 'reviewer_email', 'response', 'helpfulness']
+        // include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
+        // removed. this method is slower for any non one-one relations than just querying Photo model
       })
 
+      // get photos and characteristic
+
       const characteristicPromises = []
+      const photosPromises = []
       const reviews = []
       for (let review of returnedReviews.rows) {
         reviews.push(review.toJSON())
-        characteristicPromises.push(module.exports.getCharacteristics(review.id))
+        photosPromises.push(Photo.findAll({ where: { review_id: review.dataValues.review_id }}))
+        characteristicPromises.push(module.exports.getCharacteristics(review.dataValues.review_id))
       }
+      const photos = await Promise.all(photosPromises)
       const characteristics = await Promise.all(characteristicPromises)
 
       for (let i = 0; i < reviews.length; i++) {
+        reviews[i].photos = photos[i]
         reviews[i].characteristics = characteristics[i]
       }
       resolve(reviews)

@@ -19,12 +19,6 @@ describe('GET /reviews', function() {
       .query({product_id: 1})
       .set('Accept', 'application/json')
   expect(res.status).toBe(200)
-    // request(app)
-    //   .get('/reviews')
-    //   .query({product_id: 1})
-    //   .set('Accept', 'application/json')
-    //   .expect('Content-Type', /json/)
-    //   .expect(200, done);
   });
 });
 
@@ -36,12 +30,6 @@ describe('GET /reviews/meta', function() {
         .query({product_id: 1})
         .set('Accept', 'application/json')
     expect(res.status).toBe(200)
-    // request(app)
-    //   .get('/reviews/meta')
-    //   .query({product_id: 1})
-    //   .set('Accept', 'application/json')
-    //   .expect('Content-Type', /json/)
-    //   .expect(200, done);
   });
 });
 
