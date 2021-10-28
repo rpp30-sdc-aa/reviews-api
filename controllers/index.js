@@ -7,7 +7,22 @@ const { Review,
 
 module.exports.sequelize = sequelize;
 
-module.exports.getReviews = (product_id, limit = 5, page = 0) => {
+module.exports.getReviews = (product_id, limit = 5, page = 0, sort) => {
+  let order = [
+    ['date', 'DESC']
+  ]
+  if (sort === 'helpfulness') {
+    order = [
+      ['helpfulness', 'DESC']
+    ]
+  }
+
+  if (sort === 'relevent') {
+    order = [
+      ['rating', 'DESC']
+    ]
+  }
+
   return new Promise(async (resolve, reject) => {
     const offset = (page > 1) ? page * limit : 0;
 
@@ -18,6 +33,7 @@ module.exports.getReviews = (product_id, limit = 5, page = 0) => {
         },
         limit,
         offset,
+        order,
         attributes: [['id', 'review_id'], 'product_id', 'rating', 'date', 'summary', 'body', 'recommend', 'reported', 'reviewer_name', 'reviewer_email', 'response', 'helpfulness']
         // include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
         // removed. this method is slower for any non one-one relations than just querying Photo model
