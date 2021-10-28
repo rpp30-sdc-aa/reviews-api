@@ -1,5 +1,5 @@
-const { getReviews, postReviews } = require('../../controllers')
-const { Review } = require('../../models/index.js')
+const { getReviews, postReviews } = require('../controllers')
+const { Review } = require('../models/index.js')
 
 describe('Database Controllers', function () {
   describe('Reviews', function() {

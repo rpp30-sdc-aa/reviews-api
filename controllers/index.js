@@ -1,4 +1,10 @@
-const { Review, Photo, Characteristic, Characteristic_Review } = require('../models/index.js')
+const { Review,
+        Photo,
+        Characteristic,
+        Characteristic_Review,
+        sequelize } = require('../models/index.js')
+
+module.exports.sequelize = sequelize;
 
 module.exports.getReviews = (product_id, limit = 5, page = 0) => {
   return new Promise(async (resolve, reject) => {

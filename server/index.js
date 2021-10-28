@@ -6,7 +6,7 @@ const {
   putReport,
   getCharacteristics,
   postReviews,
-  getMetaData} = require('../controllers/index.js')
+  getMetaData, sequelize} = require('../controllers/index.js')
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -69,6 +69,15 @@ app.get('/characteristics/:review_id', async (req, res) => {
   }
 })
 
-app.listen(3005, () => {console.log('Server started....')})
+const server = app.listen(3005, () => {console.log('Server started....')})
 
-module.exports = app
+
+
+module.exports = {app,
+                  server,
+                  close: (next) => {
+                    server.close(async () => {
+                      await sequelize.close()
+                      next()
+                    })
+                  }}
