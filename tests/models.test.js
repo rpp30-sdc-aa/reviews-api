@@ -1,4 +1,4 @@
-const { getReviews, postReviews, putHelpful } = require('../controllers')
+const { getReviews, postReviews, putHelpful, putReport, getCharacteristics } = require('../controllers')
 const { Review } = require('../models/index.js')
 
 describe('Database Controllers', function () {
@@ -54,6 +54,31 @@ describe('Database Controllers', function () {
         await putHelpful(review.id)
         let updatedReview = await Review.findByPk(1)
         expect(updatedReview.helpfulness - originalValue).toBe(1)
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+
+    test('Should report a review', async function () {
+      try {
+        await putReport(1)
+        let review = await Review.findByPk(1)
+        expect(review.reported).toBeTruthy()
+        //TODO: This needs a check for if the review was originally not reported.
+        // will refactor later when I have a testing data base than can be dropped and seeded on test start
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+  })
+
+  describe('Characteristics', function () {
+    test('Should get the characteristics for a given review', async function () {
+      try {
+        let characteristics = await getCharacteristics(1)
+        for (entry in characteristics) {
+          expect(entry.value).not.toBeNull()
+        }
       } catch (err) {
         expect(err).toBeNull()
       }
