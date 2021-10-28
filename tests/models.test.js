@@ -1,4 +1,4 @@
-const { getReviews, postReviews, putHelpful, putReport, getCharacteristics } = require('../controllers')
+const { getReviews, postReviews, putHelpful, putReport, getCharacteristics, getMetaData } = require('../controllers')
 const { Review } = require('../models/index.js')
 
 describe('Database Controllers', function () {
@@ -79,6 +79,19 @@ describe('Database Controllers', function () {
         for (entry in characteristics) {
           expect(entry.value).not.toBeNull()
         }
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+  })
+
+  describe('Meta Data', function () {
+    jest.setTimeout(20000)
+    test('Should get the meta data for a given product', async function () {
+      try {
+        let metaData = await getMetaData('1')
+        expect(metaData.product_id).not.toBeNull()
+        //TODO: smoke test, need to refactor when a better testing environment can be setup
       } catch (err) {
         expect(err).toBeNull()
       }
