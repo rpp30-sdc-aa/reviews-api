@@ -1,30 +1,55 @@
-const { Review, Photo, Characteristic, Characteristic_Review } = require('../models/index.js')
+const { response } = require('express');
+const { Review,
+        Photo,
+        Characteristic,
+        Characteristic_Review,
+        sequelize } = require('../models/index.js')
 
-module.exports.getReviews = (product_id, limit = 5, page = 0) => {
+module.exports.sequelize = sequelize;
+
+module.exports.getReviews = (product_id, limit = 5, page = 0, sort) => {
+  let order = [
+    ['date', 'DESC']
+  ]
+  if (sort === 'helpfulness') {
+    order = [
+      ['helpfulness', 'DESC']
+    ]
+  }
+
+  if (sort === 'relevent') {
+    order = [
+      ['rating', 'DESC']
+    ]
+  }
+
   return new Promise(async (resolve, reject) => {
     const offset = (page > 1) ? page * limit : 0;
 
     try {
-      let returnedReviews = await Review.findAndCountAll({
+      let returnedReviews = await Review.findAll({
         where: {
           product_id
         },
         limit,
         offset,
-        include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
-        //TODO: refactor to manual query
+        order,
+        attributes: [['id', 'review_id'], 'product_id', 'rating', 'date', 'summary', 'body', 'recommend', 'reported', 'reviewer_name', 'reviewer_email', 'response', 'helpfulness']
+        // include: [{ model: Photo, separate: true, attributes: ['id', 'url'] } ]
+        // removed. this method is slower for any non one-one relations than just querying Photo model
       })
 
-      const characteristicPromises = []
+      // get photos and characteristic
+      const photosPromises = []
       const reviews = []
-      for (let review of returnedReviews.rows) {
+      for (let review of returnedReviews) {
         reviews.push(review.toJSON())
-        characteristicPromises.push(module.exports.getCharacteristics(review.id))
+        photosPromises.push(Photo.findAll({ where: { review_id: review.dataValues.review_id }}))
       }
-      const characteristics = await Promise.all(characteristicPromises)
+      const photos = await Promise.all(photosPromises)
 
       for (let i = 0; i < reviews.length; i++) {
-        reviews[i].characteristics = characteristics[i]
+        reviews[i].photos = photos[i]
       }
       resolve(reviews)
     } catch(err) {

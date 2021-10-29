@@ -1,9 +1,9 @@
-const { getReviews, postReviews } = require('../../controllers')
-const { Review } = require('../../models/index.js')
+const { getReviews, postReviews, putHelpful, putReport, getCharacteristics, getMetaData } = require('../controllers')
+const { Review } = require('../models/index.js')
 
 describe('Database Controllers', function () {
   describe('Reviews', function() {
-    jest.setTimeout(20000)
+    jest.setTimeout(10000)
     test('Should get reviews for a given product_id', async function () {
       try {
         const reviews = await getReviews('1')
@@ -21,8 +21,7 @@ describe('Database Controllers', function () {
           expect(typeof reviews[i].helpfulness).toBe('number')
         }
       } catch (err) {
-        console.log(err)
-        throw new Error(err)
+        expect(err).toBeNull()
       }
     })
 
@@ -44,6 +43,56 @@ describe('Database Controllers', function () {
         expect(review.toJSON()).toEqual(expectedReview.toJSON())
       } catch (err) {
         console.log(err)
+        expect(err).toBeNull()
+      }
+    })
+
+    test('Should increment a review helpfulness column by 1', async function () {
+      try {
+        let review = await Review.findByPk(1)
+        const originalValue = review.helpfulness
+        await putHelpful(review.id)
+        let updatedReview = await Review.findByPk(1)
+        expect(updatedReview.helpfulness - originalValue).toBe(1)
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+
+    test('Should report a review', async function () {
+      try {
+        await putReport(1)
+        let review = await Review.findByPk(1)
+        expect(review.reported).toBeTruthy()
+        //TODO: This needs a check for if the review was originally not reported.
+        // will refactor later when I have a testing data base than can be dropped and seeded on test start
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+  })
+
+  describe('Characteristics', function () {
+    test('Should get the characteristics for a given review', async function () {
+      try {
+        let characteristics = await getCharacteristics(1)
+        for (entry in characteristics) {
+          expect(entry.value).not.toBeNull()
+        }
+      } catch (err) {
+        expect(err).toBeNull()
+      }
+    })
+  })
+
+  describe('Meta Data', function () {
+    jest.setTimeout(20000)
+    test('Should get the meta data for a given product', async function () {
+      try {
+        let metaData = await getMetaData('1')
+        expect(metaData.product_id).not.toBeNull()
+        //TODO: smoke test, need to refactor when a better testing environment can be setup
+      } catch (err) {
         expect(err).toBeNull()
       }
     })
