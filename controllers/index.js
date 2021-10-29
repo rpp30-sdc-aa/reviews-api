@@ -40,21 +40,16 @@ module.exports.getReviews = (product_id, limit = 5, page = 0, sort) => {
       })
 
       // get photos and characteristic
-
-      const characteristicPromises = []
       const photosPromises = []
       const reviews = []
       for (let review of returnedReviews) {
         reviews.push(review.toJSON())
         photosPromises.push(Photo.findAll({ where: { review_id: review.dataValues.review_id }}))
-        characteristicPromises.push(module.exports.getCharacteristics(review.dataValues.review_id))
       }
       const photos = await Promise.all(photosPromises)
-      const characteristics = await Promise.all(characteristicPromises)
 
       for (let i = 0; i < reviews.length; i++) {
         reviews[i].photos = photos[i]
-        reviews[i].characteristics = characteristics[i]
       }
       resolve(reviews)
     } catch(err) {
