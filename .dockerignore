@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+tests
+seeders
+migrations
+.vscode
+ecosystem.config.js
+README.md
+.env

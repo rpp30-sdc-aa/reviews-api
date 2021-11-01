@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  reviews-api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: reviews-service
+    container_name: reviews-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=80
+      - NODE_ENV=$NODE_ENV
+      - DBUSERNAME=postgres
+      - DBPASSWORD=
+      - DBNAME=$DBNAME
+      - DBURL=postgres
+    ports:
+      - "3005:80"
+    volumes:
+      - .:/home/node/app
+    command: node server/index.js
+
+  postgres:
+        image: postgres:10.5
+        restart: always
+        container_name: reviews-db
+        env_file: .env
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=
+          - PGDATA=/pgdata/data
+        logging:
+          options:
+            max-size: 10m
+            max-file: "3"
+        ports:
+          - '5438:5432'
+        volumes:
+          - /usr/local/var/postgres:/pgdata
+          # # copy the sql script to create tables
+          # - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql

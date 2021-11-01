@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest tests/",
     "dev": "nodemon server/index.js",
-    "etl": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "etl": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "docker:build": "docker build -t alexanderolvera/reviews-service.app ./"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "@babel/core": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@fast-csv/parse": "^4.3.6",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "fast-csv": "^4.3.6",
     "pg": "^8.7.1",
