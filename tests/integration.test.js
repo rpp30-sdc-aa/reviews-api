@@ -3,7 +3,6 @@ const {app, server, close} = require('../server/index.js')
 
 const request = supertest(app)
 
-
 afterAll((done) => {
   close(done)
 })

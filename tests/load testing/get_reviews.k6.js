@@ -1,12 +1,13 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
-// import { app, close } from '../../server/index.js'
 
 export const options = {
   stages: [
     { duration: '20s', target: 0 },
     { duration: '30s', target: 20 },
     { duration: '1m30s', target: 100 },
+    { duration: '20s', target: 1000 },
+    { duration: '10s', target: 100 },
     { duration: '30s', target: 20 },
     { duration: '20s', target: 0 },
   ],
