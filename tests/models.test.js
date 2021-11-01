@@ -1,9 +1,15 @@
-const { getReviews, postReviews, putHelpful, putReport, getCharacteristics, getMetaData } = require('../controllers')
+const { getReviews, postReviews, putHelpful, putReport, getCharacteristics, getMetaData, sequelize } = require('../controllers')
 const { Review } = require('../models/index.js')
+
+afterAll((done) => {
+  await sequelize.close()
+  done()
+})
+
 
 describe('Database Controllers', function () {
   describe('Reviews', function() {
-    jest.setTimeout(10000)
+    // jest.setTimeout(10000)
     test('Should get reviews for a given product_id', async function () {
       try {
         const reviews = await getReviews('1')

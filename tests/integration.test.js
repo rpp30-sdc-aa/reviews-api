@@ -3,16 +3,12 @@ const {app, server, close} = require('../server/index.js')
 
 const request = supertest(app)
 
-beforeAll(done => {
-  done()
-})
 
 afterAll((done) => {
   close(done)
 })
 
 describe('GET /reviews', function() {
-  jest.setTimeout(25000)
   it('responds with json', async () => {
     let res = await
     request.get('/reviews')
@@ -42,7 +38,6 @@ describe('PUT /reviews/:review_id/helpful', function() {
 });
 
 describe('PUT /reviews/:review_id/report', function() {
-  jest.setTimeout(20000)
   test('responds with 204', async () => {
     let res = await request.put('/reviews/1/report')
     expect(res.status).toBe(204)
