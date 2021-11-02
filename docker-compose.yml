@@ -19,7 +19,7 @@ services:
     ports:
       - "3005:80"
     volumes:
-      - .:/home/node/app
+      - ./seeders/sample:/usr/src/app/seeders/sample
     command: node server/index.js
 
   postgres:
@@ -30,7 +30,7 @@ services:
         environment:
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=
-          - PGDATA=/pgdata/data
+          - POSTGRES_DB=$DBNAME
         logging:
           options:
             max-size: 10m
@@ -38,6 +38,9 @@ services:
         ports:
           - '5438:5432'
         volumes:
-          - /usr/local/var/postgres:/pgdata
+          - pgdata:/var/lib/postgresql/data
           # # copy the sql script to create tables
           # - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+volumes:
+  pgdata:
+    external: false

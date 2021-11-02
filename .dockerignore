@@ -1,8 +1,7 @@
 node_modules
 npm-debug.log
 tests
-seeders
-migrations
+seeders/sample
 .vscode
 ecosystem.config.js
 README.md
