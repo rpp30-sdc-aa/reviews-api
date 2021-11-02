@@ -5,11 +5,8 @@
     "database": "reviews_dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "logging": false,
-    "pool": {
-      "max": 10,
-      "min": 0
-    }
+    "logging": true,
+    "benchmark": true
   },
   "test": {
     "username": "alexanderolvera",
