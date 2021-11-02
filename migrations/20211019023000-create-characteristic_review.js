@@ -25,6 +25,7 @@ module.exports = {
         allowNull: false,
       }
     });
+    await queryInterface.addIndex('characteristic_reviews', ['review_id'])
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('characteristic_reviews');

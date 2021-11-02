@@ -71,13 +71,13 @@ app.get('/characteristics/:review_id', async (req, res) => {
 
 const server = app.listen(3005, () => {console.log('Server started....')})
 
-
-
-module.exports = {app,
-                  server,
-                  close: (next) => {
-                    server.close(async () => {
-                      await sequelize.close()
-                      next()
-                    })
-                  }}
+module.exports = {
+  app,
+  server,
+  close: (next) => {
+    server.close(async () => {
+      await sequelize.close()
+      next()
+    })
+  }
+}

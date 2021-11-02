@@ -38,7 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'Characteristic_Review',
       tableName: 'characteristic_reviews',
-      timestamps: false
+      timestamps: false,
+      indexes: [{
+        fields: ['review_id']
+      }]
   })
 
   return Characteristic_Review;
