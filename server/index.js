@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const {
@@ -6,7 +7,13 @@ const {
   putReport,
   getCharacteristics,
   postReviews,
-  getMetaData, sequelize} = require('../controllers/index.js')
+  getMetaData, sequelize } = require('../controllers/index.js')
+
+let port = process.env.PORT
+
+if (process.env.NODE_ENV === 'production') {
+  port = 80
+}
 
 app.get('/reviews', async (req, res) => {
   try {
@@ -18,7 +25,7 @@ app.get('/reviews', async (req, res) => {
       count: reviews.length,
       results: reviews
     })
-  } catch(err) {
+  } catch (err) {
     console.log(err)
     res.send(500, `Failed to fetch reviews... ${err}`)
   }
@@ -62,14 +69,14 @@ app.put('/reviews/:review_id/report', async (req, res) => {
 })
 
 app.get('/characteristics/:review_id', async (req, res) => {
-  try{
+  try {
     res.json(await getCharacteristics(req.params.review_id))
   } catch (err) {
     res.status(500).send(JSON.stringify(err))
   }
 })
 
-const server = app.listen(3005, () => {console.log('Server started....')})
+const server = app.listen(port, () => { console.log('Server started at', port) })
 
 module.exports = {
   app,
