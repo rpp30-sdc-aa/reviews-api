@@ -1,7 +1,7 @@
 module.exports = {
-  apps : [      {
-    name: "etl",
-    script: "npm",
-    args: "run etl"
-}]
+  apps: [{
+    script: "server/index.js",
+    instances: "4",
+    exec_mode: "cluster"
+  }]
 }
