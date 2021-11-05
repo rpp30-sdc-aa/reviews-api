@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  reviews-api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: reviews-service
+    container_name: reviews-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=80
+      - NODE_ENV=$NODE_ENV
+      - DBUSERNAME=$DBUSERNAME
+      - DBPASSWORD=$DBPASSWORD
+      - DBNAME=$DBNAME
+      - DBURL=host.docker.internal
+    ports:
+      - "3005:80"
+    volumes:
+      - ./seeders/sample:/usr/src/app/seeders/sample
+    # command: node server/index.js
+    command: npx pm2-runtime start ecosystem.config.js
