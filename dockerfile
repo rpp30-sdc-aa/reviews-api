@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 80
-CMD [ "node", "server/index.js" ]
+CMD [ "npx", "pm2-runtime", "start", "ecosystem.config.js" ]

@@ -3,6 +3,5 @@ npm-debug.log
 tests
 seeders/sample
 .vscode
-ecosystem.config.js
 README.md
 .env
