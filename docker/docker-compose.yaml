@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  reviews-api-1:
+    image: alexanderolvera/reviews-service:latest
+    container_name: reviews-app-1
+    restart: unless-stopped
+    environment:
+      - PORT
+      - NODE_ENV
+      - DBUSERNAME
+      - DBPASSWORD
+      - DBNAME
+      - DBURL
+    ports:
+      - "5002:80"
+    # command: node server/index.js
+    command: npx pm2-runtime start ecosystem.config.js
+  reviews-api-2:
+    image: alexanderolvera/reviews-service:latest
+    container_name: reviews-app-2
+    restart: unless-stopped
+    environment:
+      - PORT
+      - NODE_ENV
+      - DBUSERNAME
+      - DBPASSWORD
+      - DBNAME
+      - DBURL
+    ports:
+      - "5001:80"
+    # command: node server/index.js
+    command: npx pm2-runtime start ecosystem.config.js
+
+  reviews-api-3:
+    image: alexanderolvera/reviews-service:latest
+    container_name: reviews-app-3
+    restart: unless-stopped
+    environment:
+      - PORT
+      - NODE_ENV
+      - DBUSERNAME
+      - DBPASSWORD
+      - DBNAME
+      - DBURL
+    ports:
+      - "5003:80"
+    # command: node server/index.js
+    command: npx pm2-runtime start ecosystem.config.js
+  nginx:
+    build: ./nginx
+    ports:
+    - "3005:80"
+    depends_on:
+    - reviews-api-1
+    - reviews-api-2
