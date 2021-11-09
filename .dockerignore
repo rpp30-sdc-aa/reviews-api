@@ -1,7 +1,0 @@
-node_modules
-npm-debug.log
-tests
-seeders/sample
-.vscode
-README.md
-.env

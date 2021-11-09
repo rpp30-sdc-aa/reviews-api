@@ -7,7 +7,6 @@
     "test": "jest tests/",
     "dev": "nodemon server/index.js",
     "etl": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "docker:build": "docker build -t alexanderolvera/reviews-service.app ./"
   },
   "repository": {
     "type": "git",
